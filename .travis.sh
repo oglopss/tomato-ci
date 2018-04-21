@@ -38,6 +38,9 @@ sudo ln -s ~/tomato/tools/brcm /opt/brcm
 
 rsync -rpv --ignore-times  ./tomato-gui/*  ./tomato/release/src-rt/router/www/  --exclude .git
 
+echo ========== pkg-config --exists uuid ==========
+pkg-config pkg-config --exists uuid && echo 1
+
 echo ========== bison ==========
 apt-cache showpkg bison
 
@@ -202,8 +205,19 @@ head -200 /usr/include/ncurses.h
 # ii  libopts25-dev                       1:5.12-0.1ubuntu1                                   automated option processing library based on autogen
 # ii  libtool                             2.4.2-1ubuntu1                                      Generic library support script
 
+cd ~
+wget https://downloads.sourceforge.net/project/libuuid/libuuid-1.0.3.tar.gz
+tar xf libuuid-1.0.3.tar.gz
+cd libuuid-1.0.3
+# sh configure --prefix /usr
+CC=mipsel-uclibc-gcc CXX=mipsel-uclibc-g++ AR=mipsel-uclibc-ar RANLIB=mipsel-uclibc-ranlib ./configure --host=mipsel-uclibc-linux --prefix=$HOME/uuid-install
 
+# CC=mipsel-uclibc-gcc CXX=mipsel-uclibc-g++ AR=mipsel-uclibc-ar RANLIB=/opt/brcm/hndtools-mipsel-uclibc/bin/mipsel-uclibc-ranlib ./configure --host=mipsel-uclibc-linux --prefix=$HOME/uuid-install
+make
+sudo  make install
 
+echo ========== pkg-config --exists uuid again ==========
+pkg-config --exists uuid && echo 1
 
 # echo /usr/share/aclocal | sudo tee --append /usr/local/share/aclocal/dirlist
 
